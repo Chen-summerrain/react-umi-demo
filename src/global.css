@@ -1,0 +1,11 @@
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.ant-btn + .ant-btn {
+  margin-left: 20px;
+}
