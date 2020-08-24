@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useMemo, useReducer, useCallback } 
 import {Button} from 'antd';
 import { connect } from 'dva';
 
+import Login from '../Login';
 import styles from './index.less';
 
 interface IndexProps {
@@ -13,13 +14,48 @@ const Index = ({
     userInfo,
     dispatch
 }: IndexProps) => {
-    const isLogin = userInfo.user;
+    const {isLogin,isAdmin,userId} = userInfo;
+    const [state,setState] = useReducer((o,n)=>({...o,...n}),{
+        tag: 1,
+        visible:false
+    })
+
+    useEffect(()=>{
+        console.log('/index.tsx [23]--1','check');
+        dispatch({type:'login/check'})
+    },[dispatch, isLogin])
+
+    useEffect(()=>{
+        console.log('/index.tsx [28]--1','islogin');
+        if(isLogin && state.tag===1) {
+            setState({visible:false})
+        }
+    },[isLogin, state.tag])
+
     console.log('/index.tsx [17]--1',userInfo);    
     const handleLogin = () => {
-        dispatch({type:'user/login',payload:{name:'admin',password:'admin'}})
+        setState({
+            tag:1,
+            visible: true
+        })
+        // dispatch({type:'user/login',payload:{name:'admin',password:'admin'}})
     }
     const handleRegister = () => {
-
+        setState({
+            tag:2,
+            visible: true
+        })
+    }
+    const handleRegisterSuccess = () => {
+        setState({tag:1})
+    }
+    const handleCancel = () =>{
+        setState({
+            visible:false
+        })
+    }
+    const handleLogout = ()=> {
+        dispatch({type:'login/logout'})
     }
     return 	(
         <div className={styles.head}>
@@ -32,13 +68,21 @@ const Index = ({
                     </>) :(<>
                         <span className={styles['head-user-icon']}></span>
                         <span className={styles['head-user-name']}>{userInfo.user}</span>
+                        <Button type="link" onClick={handleLogout} size="small">Log out</Button>
                     </>)
                 }
             </div>
+            <Login 
+                tag={state.tag}
+                visible={state.visible}
+                onRegisterSuccess={handleRegisterSuccess}
+                onCancel={handleCancel}
+
+            />
         </div>
     )
 }
 
 export default connect(state => ({
-    userInfo:state.user.userInfo
+    userInfo:state.login
 }))(Index);

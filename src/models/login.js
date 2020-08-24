@@ -6,9 +6,7 @@ const isLogin = !!localStorage.getItem('token');
 export default {
   namespace: 'login',
   state: {
-    userInfo:{
-      isLogin
-    }
+    isLogin
   },
   reducers: {
     setState(state, { payload }) {
@@ -20,8 +18,14 @@ export default {
     *login({ payload }, { put, call }) {
       const res = yield call(service.login, payload);
       localStorage.setItem('token',res.token)
-      responseStatus(res);
-      return res.success
+      yield put({
+        type:'setState',
+        payload:{
+          isLogin:true
+        }
+      })
+      // responseStatus(res);
+      // return res.success
       
     },
 
@@ -29,6 +33,7 @@ export default {
       const res = yield call(service.register, payload);
       responseStatus(res);
       return res.success;
+      // return res.success;
     },
 
     *logout({ payload }, { put }) {
@@ -36,9 +41,7 @@ export default {
       yield put({
         type:'setState',
         payload:{
-          userInfo:{
-            isLogin:false
-          }
+          isLogin:false
         }
       })
     },
@@ -51,12 +54,10 @@ export default {
         yield put({
           type:'setState',
           payload:{
-            userInfo: {
-              user:res.data.name,
-              userId: res.data.id,
-              isAdmin: res.data.isAdmin,
-              isLogin:true,
-            }
+            user:res.data.name,
+            userId: res.data.id,
+            isAdmin: res.data.isAdmin,
+            isLogin:true,
           }
         })
       }

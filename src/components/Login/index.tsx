@@ -1,14 +1,11 @@
 import React, { useEffect } from 'react';
 import { connect } from 'dva';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Modal, Input, Button } from 'antd';
+import { Modal, Input, Button, Form} from 'antd';
 
 import styles from './index.less';
-import { async } from 'q';
 
 interface loginProps {
-    dispatch: any
+    dispatch: ()=>void
 }
 
 const formItemLayout = {
@@ -29,11 +26,15 @@ const validateMessages = {
 };
 
 const Index = ({
-    dispatch
+    dispatch,
+    visible,
+    tag,
+    onCancel,
+    onRegisterSuccess
 }: loginProps) => {
     const [form] = Form.useForm();
     
-    // const {validateFields} = form;
+    const {validateFields} = form;
     useEffect(() => {
         // console.log('/index.jsx [9]--1','login');
         // dispatch({type:'user/login',payload:{name:'admin',password:'admin'}})
@@ -41,22 +42,40 @@ const Index = ({
     }, [])
 
     const handleLogin = async() => {
-        // const values = await validateFields();
-        // console.log('/index.tsx [33]--1',values);
+        try{
+
+            const values = await validateFields();
+            dispatch({type:'login/login',payload:{...values}});
+            console.log('/index.tsx [33]--1',values);
+        }catch(err) {
+            console.log('/index.tsx [47]--1',err);
+        }
+    }
+
+    const handleRegister = async() => {
+        try{
+
+            const values = await validateFields();
+            const res = await dispatch({type:'login/register',payload:{...values}});
+            res&&onRegisterSuccess&&onRegisterSuccess();
+            console.log('/index.tsx [33]--1',values);
+        }catch(err) {
+            console.log('/index.tsx [47]--1',err);
+        }
     }
     return (
         <Modal
-            visible={true}
+            visible={visible}
             footer={null}
             forceRender={true}
         //   onOk={this.handleOk}
-        //   onCancel={this.handleCancel}
+          onCancel={onCancel}
         >
             {
-                <Form name="login_form" validateMessages={validateMessages}>
+                <Form name="login_form" form={form} validateMessages={validateMessages}>
                     <Form.Item
                         {...formItemLayout}
-                        name={['user', 'name']}
+                        name={['name']}
                         label="Name"
                         rules={[{required: true}]}
                     >
@@ -64,14 +83,27 @@ const Index = ({
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
-                        name={['user', 'password']}
+                        name={['password']}
                         label="Password"
                         rules={[{required: true}]}
                     >
                         <Input placeholder="Please input your password" />
                     </Form.Item>
+                    {
+                        tag !==1 && <Form.Item
+                            {...formItemLayout}
+                            name={['email']}
+                            label="email"
+                            rules={[{required: true}]}
+                        >
+                            <Input placeholder="Please input your email" />
+                        </Form.Item>
+                    }
                     <Form.Item {...formTailLayout}>
-                        <Button type="primary" onClick={handleLogin}>Login</Button>
+                        {
+                            tag===1?<Button type="primary" onClick={handleLogin}>Login</Button>:
+                                    <Button type="primary" onClick={handleRegister}>Register</Button>
+                        }
                     </Form.Item>
                 </Form>
             }
