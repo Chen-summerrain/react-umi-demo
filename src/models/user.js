@@ -1,40 +1,42 @@
 import * as service from '@/services/user';
 import {responseStatus} from '@/utils/tools'
-import { publicDecrypt } from 'crypto';
 
 export default {
   namespace: 'user',
   state: {
-    userInfo:{}
+    userList:[]
   },
   reducers: {
     setState(state, { payload }) {
-      console.log('/user.js [11]--1',payload);
       return { ...state, ...payload };
     },
   },
   effects: {
-    *login({ payload }, { put, call }) {
-      const res = yield call(service.login, payload);
-      const _res = yield responseStatus(res);
-      console.log('/user.js [17]--1',res,_res);
-      if(_res) {
-        localStorage.setItem('token',res.token);
-        localStorage.setItem('userId',res.data.id);
+    *getUserList({ payload }, { put, call }) {
+      const res = yield call(service.users)
+      
+      if(res.success) {
         yield put({
           type:'setState',
           payload:{
-            userInfo: {
-              user:res.data.name
-            }
+            userList: res.data
           }
         })
-
+      }else {
+        responseStatus(res)
       }
     },
-    *register({ payload }, { call }) {
-      const res = yield call(service.register, payload);
+    *updateUser({ payload }, { put, call }) {
+      const res = yield call(service.updateUser,payload)
       responseStatus(res)
-    }
+      console.log('/user.js [31]--1','update',res);
+      return res.success;
+    },
+    *deleteUser({ payload }, { put, call }) {
+      const res = yield call(service.deleteUser,payload)
+      responseStatus(res)
+      console.log('/user.js [31]--1','del',res);
+      return res.success;
+    },
   }
 }

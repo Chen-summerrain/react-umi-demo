@@ -58,7 +58,6 @@ const Index = ({
             const values = await validateFields();
             const res = await dispatch({type:'login/register',payload:{...values}});
             res&&onRegisterSuccess&&onRegisterSuccess();
-            console.log('/index.tsx [33]--1',values);
         }catch(err) {
             console.log('/index.tsx [47]--1',err);
         }

@@ -5,7 +5,7 @@ import Table from './components/EditableTable';
 import styles from './index.less';
 
 const Index = ({
-
+    
 }) => {
 
     return 	(
@@ -15,6 +15,4 @@ const Index = ({
     )
 }
 
-export default connect(state => ({
-
-}))(Index);
+export default  Index;

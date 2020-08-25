@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useMemo, useReducer, useCallback } from 'react';
+import cns from 'classname';
 import {Button} from 'antd';
 import { connect } from 'dva';
 
@@ -12,27 +13,25 @@ interface IndexProps {
 
 const Index = ({
     userInfo,
+    className,
     dispatch
 }: IndexProps) => {
-    const {isLogin,isAdmin,userId} = userInfo;
+    const {isLogin,isAdmin} = userInfo;
     const [state,setState] = useReducer((o,n)=>({...o,...n}),{
         tag: 1,
         visible:false
     })
 
     useEffect(()=>{
-        console.log('/index.tsx [23]--1','check');
         dispatch({type:'login/check'})
     },[dispatch, isLogin])
 
     useEffect(()=>{
-        console.log('/index.tsx [28]--1','islogin');
         if(isLogin && state.tag===1) {
             setState({visible:false})
         }
     },[isLogin, state.tag])
 
-    console.log('/index.tsx [17]--1',userInfo);    
     const handleLogin = () => {
         setState({
             tag:1,
@@ -58,7 +57,7 @@ const Index = ({
         dispatch({type:'login/logout'})
     }
     return 	(
-        <div className={styles.head}>
+        <div className={cns(styles.head,className)}>
             <div className={styles['head-title']}>Hello World!</div>
             <div className={styles['head-right']}>
                 {

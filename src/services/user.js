@@ -1,20 +1,27 @@
 /* eslint-disable import/prefer-default-export */
 import request from '@/utils/request';
 
-export function login({ ...rest }) {
+export function users() {
   return request({
-    url: '/login',
-    serve: 'auth',
-    method: 'POST',
-    data: rest,
+    url: '',
+    serve: 'users',
+    method: 'GET',
   });
 }
 
-export function register({ ...rest }) {
+export function updateUser({id,...rest}) {
   return request({
-    url: '/register',
-    serve: 'auth',
-    method: 'POST',
-    data: rest,
+    url: `/${id}`,
+    serve: 'users',
+    method: 'PUT',
+    data:rest
+  });
+}
+
+export function deleteUser(id) {
+  return request({
+    url: `/${id}`,
+    serve: 'users',
+    method: 'DELETE',
   });
 }
