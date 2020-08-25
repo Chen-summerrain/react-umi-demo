@@ -39,7 +39,7 @@ function EditableTable({
 
   useEffect(() => {
     dispatch({ type: 'user/getUserList' })
-  }, [dispatch, editingKey, visible])
+  }, [dispatch, editingKey])
 
   useEffect(() => {
     setData([...userList])
@@ -173,6 +173,7 @@ function EditableTable({
       console.log('/EditableTable.tsx [163]--1', 'add', res);
       if (res) {
         setVisible(false)
+        dispatch({ type: 'user/getUserList' })
       }
     } catch (err) {
       console.log('/index.tsx [47]--1', err);
@@ -208,7 +209,7 @@ function EditableTable({
         }}
       >
         {
-          <Form name="add_form" form={form} validateMessages={validateMessages}>
+          visible && <Form name="add_form" form={form} validateMessages={validateMessages}>
             <Form.Item
               {...formItemLayout}
               name={['name']}

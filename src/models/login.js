@@ -1,16 +1,19 @@
 import * as service from '@/services/login';
 import {responseStatus} from '@/utils/tools';
 
-const isLogin = !!localStorage.getItem('token');
+// const isLogin = !!localStorage.getItem('token');
 
 export default {
   namespace: 'login',
   state: {
-    isLogin
+    
   },
   reducers: {
     setState(state, { payload }) {
       return { ...state, ...payload };
+    },
+    resetState() {
+      return {};
     },
 
   },
@@ -37,19 +40,18 @@ export default {
     },
 
     *logout({ payload }, { put }) {
+      console.log('/login.js [42]--1','logout');
+      localStorage.removeItem('userId');
       localStorage.removeItem('token');
       yield put({
         type:'setState',
-        payload:{
-          isLogin:false
-        }
       })
     },
 
     *check({ payload }, { put,call }) {
       const res = yield call(service.check);
       // const _res = responseStatus(res);
-      if(res) {
+      if(res.success) {
         localStorage.setItem('userId',res.data.id);
         yield put({
           type:'setState',
@@ -59,6 +61,11 @@ export default {
             isAdmin: res.data.isAdmin,
             isLogin:true,
           }
+        })
+      }else {
+        // check false run logout
+        yield put({
+          type:'logout'
         })
       }
     }

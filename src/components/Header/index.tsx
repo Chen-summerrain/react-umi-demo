@@ -82,6 +82,8 @@ const Index = ({
     )
 }
 
-export default connect(state => ({
-    userInfo:state.login
-}))(Index);
+export default connect(state => {
+    return ({
+        userInfo:state.login
+    })
+})(Index);
