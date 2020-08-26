@@ -16,7 +16,7 @@ const Index = ({
     className,
     dispatch
 }: IndexProps) => {
-    const {isLogin,isAdmin} = userInfo;
+    const {isLogin,isAdmin,user} = userInfo;
     const [state,setState] = useReducer((o,n)=>({...o,...n}),{
         tag: 1,
         visible:false
@@ -66,7 +66,7 @@ const Index = ({
                         <Button type="primary" onClick={handleRegister} size="small">Regster</Button>
                     </>) :(<>
                         <span className={styles['head-user-icon']}></span>
-                        <span className={styles['head-user-name']}>{userInfo.user}</span>
+                        <span className={styles['head-user-name']}>{user}</span>
                         <Button type="link" onClick={handleLogout} size="small">Log out</Button>
                     </>)
                 }
@@ -76,7 +76,6 @@ const Index = ({
                 visible={state.visible}
                 onRegisterSuccess={handleRegisterSuccess}
                 onCancel={handleCancel}
-
             />
         </div>
     )

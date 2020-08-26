@@ -44,7 +44,7 @@ export default {
       localStorage.removeItem('userId');
       localStorage.removeItem('token');
       yield put({
-        type:'setState',
+        type:'resetState',
       })
     },
 
