@@ -56,7 +56,6 @@ const Index = ({
     const handleLogout = ()=> {
         dispatch({type:'login/logout'})
     }
-    
     return 	(
         <div className={cns(styles.head,className)}>
             <div className={styles['head-title']}>Hello World!</div>
