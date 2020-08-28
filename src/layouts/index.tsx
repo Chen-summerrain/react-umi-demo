@@ -2,7 +2,7 @@ import React from 'react';
 
 import Head from '@/components/Header';
 import styles from './index.less';
-
+console.log('/index.tsx [4]--1','1');
 const BasicLayout: React.FC = props => {
   return (
 
