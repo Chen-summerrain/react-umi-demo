@@ -6,6 +6,7 @@ console.log('/index.tsx [3]--1','test1');
 console.log('/index.tsx [5]--1','test11');
 console.log('/index.tsx [6]--1','test2');
 console.log('/index.tsx [7]--1','test1-11');
+console.log('/index.tsx [7]--1','test2-222');
 const BasicLayout: React.FC = props => {
   return (
     <div className={styles.normal}>
